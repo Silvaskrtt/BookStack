@@ -5,7 +5,6 @@
 // Função para o botão de voltar
 static void on_back_to_main(GtkButton *button, gpointer user_data) {
     GtkWindow *current_window = GTK_WINDOW(gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_WINDOW));
-    GtkApplication *app = GTK_APPLICATION(user_data);
 
     if (current_window) {
         gtk_window_destroy(current_window); // Fecha a janela atual
@@ -337,6 +336,9 @@ static void activate(GtkApplication *app, gpointer user_data) {
 
     // Associa a janela à aplicação
     gtk_window_set_application(window, app);
+
+    // Define o ícone da janela pelo nome do tema (exemplo: "folder" ou "document-open")
+    gtk_window_set_icon_name(window, "address-book");
 
     // Obtém e conecta os botões principais
     GtkButton *livros_btn = GTK_BUTTON(gtk_builder_get_object(builder, "livros"));
