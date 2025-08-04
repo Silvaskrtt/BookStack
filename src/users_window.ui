@@ -160,36 +160,6 @@
                 </child>
               </object>
             </child>
-
-            <!-- Linha de botões inferiores -->
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property> <!-- Organização horizontal -->
-                <property name="spacing">15</property> <!-- Espaço entre botões -->
-                <property name="halign">center</property> <!-- Centralizado -->
-                <style>
-                  <class name="usersExt-form"/> <!-- Classe CSS para personalização -->
-                </style>
-
-                <child>
-                  <object class="GtkButton" id="todos_usuarios_btn">
-                    <property name="label">Todos Usuários</property>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkButton" id="excluir_usuario_btn">
-                    <property name="label">Excluir Usuário</property>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkButton" id="editar_usuario_btn">
-                    <property name="label">Editar Usuário</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
 

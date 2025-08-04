@@ -161,35 +161,6 @@
               </object>
             </child>
 
-            <!-- Linha de botões inferiores -->
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property> <!-- Organização horizontal -->
-                <property name="spacing">15</property> <!-- Espaço entre botões -->
-                <property name="halign">center</property> <!-- Centralizado -->
-                <style>
-                  <class name="bookExt-form"/> <!-- Classe CSS para personalização -->
-                </style>
-
-                <child>
-                  <object class="GtkButton" id="todos_livro_btn">
-                    <property name="label">Todos Livros</property>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkButton" id="excluir_livro_btn">
-                    <property name="label">Excluir Livro</property>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkButton" id="editar_livro_btn">
-                    <property name="label">Editar Livro</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
 
