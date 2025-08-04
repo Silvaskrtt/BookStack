@@ -337,8 +337,8 @@ static void activate(GtkApplication *app, gpointer user_data) {
     // Associa a janela à aplicação
     gtk_window_set_application(window, app);
 
-    // Define o ícone da janela pelo nome do tema (exemplo: "folder" ou "document-open")
-    gtk_window_set_icon_name(window, "address-book");
+    // Define o ícone da janela pelo nome do tema
+    gtk_window_set_icon_name(window, "x-office-address-book");
 
     // Obtém e conecta os botões principais
     GtkButton *livros_btn = GTK_BUTTON(gtk_builder_get_object(builder, "livros"));
