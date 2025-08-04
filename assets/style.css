@@ -1,0 +1,126 @@
+/* Barra de menus superior */
+.menu-bar {
+  background-color: #000; /* Fundo preto */
+  padding: 10px; /* Espaçamento interno */
+  border-radius: 20px; /* Cantos arredondados */
+}
+
+.menu-bar button {
+  background-color: #ccc; /* Cinza claro */
+  border-radius: 10px; /* Cantos arredondados */
+  padding: 6px 20px; /* Espaçamento interno */
+}
+
+/* --------- Style Janela Usuários e sub-janelas --------- */
+
+/* Formulário de usuários */
+.users-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 20px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Campos de entrada do formulário de usuários */
+.users-form entry {
+  background-color: #e7e7e7; /* Cinza claro */
+  color: #000000; /* Texto preto */
+  border-radius: 15px; /* Cantos arredondados */
+  padding: 5px 10px; /* Espaçamento interno */
+}
+
+/* Botão cadastro dentro do formulário */
+.users-form button {
+  color: #000000; /* Texto branco */
+  border-radius: 15px; /* Cantos arredondados */
+  padding: 5px 15px; /* Espaçamento interno */
+}
+
+/* Caixa Preta do botões abaixo */
+.usersExt-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Botões ext de usuários */
+.usersExt-form button{
+  color: #000000; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 5px 15px; /* Espaçamento interno */
+}
+
+/* --------- Style Janela Livros e sub-janelas --------- */
+
+/* Formulário de livros */
+.book-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 20px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Campos de entrada do formulário de livros */
+.book-form entry {
+  background-color: #e7e7e7; /* Cinza claro */
+  color: #000000; /* Texto preto */
+  border-radius: 15px; /* Cantos arredondados */
+  padding: 5px 10px; /* Espaçamento interno */
+}
+
+/* Botão cadastro dentro do formulário */
+.book-form button {
+  background-color: #000; /* Fundo preto */
+  color: #000000; /* Texto branco */
+  border-radius: 15px; /* Cantos arredondados */
+  padding: 5px 15px; /* Espaçamento interno */
+}
+
+/* Caixa Preta do botões abaixo */
+.bookExt-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Botões ext de livro */
+.bookExt-form button{
+  color: #000000; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 5px 15px; /* Espaçamento interno */
+}
+
+/* --------- Style Janela Empréstimos e sub-janelas --------- */
+
+/* Formulário de empréstimo */
+.emp-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 20px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Campos de entrada do formulário de empréstimo */
+.emp-form entry {
+  background-color: #e7e7e7; /* Cinza claro */
+  color: #000000; /* Texto preto */
+  border-radius: 15px; /* Cantos arredondados */
+  padding: 5px 10px; /* Espaçamento interno */
+}
+
+/* Caixa Preta do botões abaixo */
+.empExt-form {
+  background-color: #000; /* Fundo preto */
+  color: #fff; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Botões ext de empréstimo */
+.empExt-form button{
+  color: #000000; /* Texto branco */
+  border-radius: 30px; /* Cantos arredondados */
+  padding: 5px 15px; /* Espaçamento interno */
+}

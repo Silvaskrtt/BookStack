@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.dbclient-js": "javascript",
+        "stdlib.h": "c",
+        "database.h": "c",
+        "windows.h": "c",
+        "system_error": "c",
+        "cstdlib": "c",
+        "gstdio.h": "c"
+    }
+}

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- Requisito mínimo da biblioteca GTK versão 4.0 -->
+  <requires lib="gtk" version="4.0"/>
+
+  <!-- Janela principal de Cadastro de Livro -->
+  <object class="GtkWindow" id="book_window">
+    <property name="title">Livros</property> <!-- Título da janela -->
+    <property name="default-width">900</property> <!-- Largura padrão da janela -->
+    <property name="default-height">500</property> <!-- Altura padrão da janela -->
+    <child>
+      <!-- Container de sobreposição (permite elementos fixos sobre o conteúdo principal) -->
+      <object class="GtkOverlay">
+
+        <child>
+          <!-- Container principal para alinhar tudo verticalmente -->
+          <object class="GtkBox">
+            <property name="orientation">vertical</property> <!-- Organização vertical -->
+            <property name="spacing">20</property> <!-- Espaço entre elementos -->
+            <property name="halign">center</property> <!-- Centraliza horizontalmente -->
+            <property name="valign">center</property> <!-- Centraliza verticalmente -->
+
+            <!-- Bloco do formulário -->
+            <child>
+              <!-- Caixa vertical que será estilizada como bloco preto arredondado -->
+              <object class="GtkBox">
+                <property name="orientation">vertical</property> <!-- Organização vertical -->
+                <property name="spacing">15</property> <!-- Espaço interno -->
+                <style>
+                  <class name="book-form"/> <!-- Classe CSS para personalização -->
+                </style>
+                <property name="margin-start">20</property> <!-- Margem esquerda -->
+                <property name="margin-end">20</property> <!-- Margem direita -->
+                <property name="margin-top">20</property> <!-- Margem superior -->
+                <property name="margin-bottom">20</property> <!-- Margem inferior -->
+
+                <!-- Título principal -->
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Cadastro de Livro</property> <!-- Texto do título -->
+                    <attributes>
+                      <attribute name="weight" value="bold"/> <!-- Negrito -->
+                      <attribute name="scale" value="1.3"/> <!-- Tamanho maior -->
+                    </attributes>
+                    <property name="halign">center</property> <!-- Centralizado -->
+                  </object>
+                </child>
+
+                <!-- Subtítulo -->
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Informações do Livro</property> <!-- Texto do subtítulo -->
+                    <attributes>
+                      <attribute name="style" value="italic"/> <!-- Itálico -->
+                    </attributes>
+                    <property name="halign">center</property> <!-- Centralizado -->
+                  </object>
+                </child>
+
+                <!-- Grade para organizar os campos -->
+                <child>
+                  <object class="GtkGrid">
+                    <property name="column-spacing">10</property> <!-- Espaço entre colunas -->
+                    <property name="row-spacing">15</property> <!-- Espaço entre linhas -->
+                    <property name="halign">center</property> <!-- Centralizado -->
+
+                    <!-- Campo Título -->
+                    <child>
+                      <object class="GtkLabel" id="titulo_label">
+                        <property name="label">Título:</property> <!-- Texto do rótulo -->
+                        <property name="halign">end</property> <!-- Alinha à direita -->
+                        <layout>
+                          <property name="column">0</property> <!-- Coluna -->
+                          <property name="row">0</property> <!-- Linha -->
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="titulo_entry">
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+
+                    <!-- Campo Ano -->
+                    <child>
+                      <object class="GtkLabel" id="ano_label">
+                        <property name="label">Ano:</property>
+                        <property name="halign">end</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="ano_entry">
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+
+                    <!-- Campo Autor -->
+                    <child>
+                      <object class="GtkLabel" id="autor_label">
+                        <property name="label">Autor:</property>
+                        <property name="halign">end</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="autor_entry">
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+
+                    <child>
+                      <object class="GtkLabel" id="disponibilidade_label">
+                        <property name="label">Disponibilidade:</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="disponibilidade_entry">
+                        <property name="hexpand">true</property>
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+
+                    <!-- Botão Cadastrar Livro -->
+                    <child>
+                      <object class="GtkButton" id="cadastrar_livro_btn">
+                        <property name="label">Cadastrar Livro</property> <!-- Texto do botão -->
+                        <layout>
+                          <property name="column">4</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <!-- Linha de botões inferiores -->
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property> <!-- Organização horizontal -->
+                <property name="spacing">15</property> <!-- Espaço entre botões -->
+                <property name="halign">center</property> <!-- Centralizado -->
+                <style>
+                  <class name="bookExt-form"/> <!-- Classe CSS para personalização -->
+                </style>
+
+                <child>
+                  <object class="GtkButton" id="todos_livro_btn">
+                    <property name="label">Todos Livros</property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkButton" id="excluir_livro_btn">
+                    <property name="label">Excluir Livro</property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkButton" id="editar_livro_btn">
+                    <property name="label">Editar Livro</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Botão de voltar (sobreposto no canto superior esquerdo) -->
+        <child type="overlay">
+          <object class="GtkButton" id="back_button">
+            <property name="icon-name">go-previous-symbolic</property> <!-- Ícone de voltar -->
+            <property name="halign">start</property> <!-- Alinha à esquerda -->
+            <property name="valign">start</property> <!-- Alinha no topo -->
+            <property name="margin-start">10</property> <!-- Margem esquerda -->
+            <property name="margin-top">10</property> <!-- Margem superior -->
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
