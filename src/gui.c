@@ -2,8 +2,7 @@
 #include <glib/gstdio.h>
 #include <database.h>
 
-// --------- Função o botão voltar ---------
-
+// Função para o botão de voltar
 static void on_back_to_main(GtkButton *button, gpointer user_data) {
     GtkWindow *current_window = GTK_WINDOW(gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_WINDOW));
     GtkApplication *app = GTK_APPLICATION(user_data);
@@ -13,13 +12,13 @@ static void on_back_to_main(GtkButton *button, gpointer user_data) {
     }
 }
 
-// --------- Funções Usuários para conexão do GTK com DB ---------
+// Funções relacionadas ao cadastro de usuários
 
-// Callback para cadastrar usuário ao clicar no botão "Usuários"
+// Callback chamado ao clicar no botão de cadastrar usuário
 static void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = GTK_BUILDER(user_data);
 
-    // Obtém referências para os campos de entrada
+    // Busca os campos de entrada do formulário
     GtkEntry *nome_entry = GTK_ENTRY(gtk_builder_get_object(builder, "nome_entry"));
     GtkEntry *sobrenome_entry = GTK_ENTRY(gtk_builder_get_object(builder, "sobrenome_entry"));
     GtkEntry *cpf_entry = GTK_ENTRY(gtk_builder_get_object(builder, "cpf_entry"));
@@ -31,7 +30,7 @@ static void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    // Lê os textos inseridos nos campos
+    // Lê os valores digitados pelo usuário
     const char *nome = gtk_editable_get_text(GTK_EDITABLE(nome_entry));
     const char *sobrenome = gtk_editable_get_text(GTK_EDITABLE(sobrenome_entry));
     const char *cpf = gtk_editable_get_text(GTK_EDITABLE(cpf_entry));
@@ -50,12 +49,12 @@ static void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    // Insere novo usuário
+    // Insere o novo usuário no banco
     char *idUsuario = cadUser(db.db, nome, sobrenome, cpf, numtelefone);
     if (idUsuario) {
         g_print("Usuário cadastrado com ID: %s\n", idUsuario);
         free(idUsuario);
-        
+
         // Limpa os campos após o cadastro
         gtk_editable_set_text(GTK_EDITABLE(nome_entry), "");
         gtk_editable_set_text(GTK_EDITABLE(sobrenome_entry), "");
@@ -65,7 +64,7 @@ static void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         g_warning("Falha ao cadastrar usuário");
     }
 
-    // Fecha conexão com o banco
+    // Fecha a conexão com o banco
     discDB(&db);
 }
 
@@ -73,8 +72,8 @@ static void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
 static void on_users_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
-    
-    // Carrega a interface de usuários a partir do arquivo .ui
+
+    // Carrega a interface de usuários do arquivo .ui
     if (!gtk_builder_add_from_file(builder, "src/users_window.ui", &error)) {
         g_warning("Erro ao carregar users_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
@@ -82,18 +81,18 @@ static void on_users_clicked(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    // Obtém referência para a janela
+    // Obtém a janela de usuários
     GtkWindow *users_window = GTK_WINDOW(gtk_builder_get_object(builder, "users_window"));
     if (!users_window) {
         g_warning("Falha ao obter a janela de usuários do builder");
         g_object_unref(builder);
         return;
     }
-    
+
     // Mantém o builder vivo enquanto a janela existir
     g_object_set_data_full(G_OBJECT(users_window), "builder", builder, (GDestroyNotify)g_object_unref);
 
-    // Conecta evento do botão de cadastro de usuário
+    // Conecta o botão de cadastro de usuário
     GtkButton *cad_btn = GTK_BUTTON(gtk_builder_get_object(builder, "cadastrar_usuario_btn"));
     if (cad_btn) {
         g_signal_connect(cad_btn, "clicked", G_CALLBACK(on_cadastrar_usuario), builder);
@@ -103,20 +102,20 @@ static void on_users_clicked(GtkButton *button, gpointer user_data) {
     gtk_window_set_application(users_window, GTK_APPLICATION(user_data));
     gtk_window_present(users_window);
 
-    // Conecta o botão de voltar a janela
+    // Conecta o botão de voltar
     GtkButton *back_btn = GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));
     if (back_btn) {
         g_signal_connect(back_btn, "clicked", G_CALLBACK(on_back_to_main), user_data);
     }
 }
 
-// --------- Funções Livros para conexão do GTK com DB ---------
+// Funções relacionadas ao cadastro de livros
 
-// Callback para cadastrar livro
+// Callback chamado ao clicar no botão de cadastrar livro
 static void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = GTK_BUILDER(user_data);
 
-    // Obtém campos de entrada
+    // Busca os campos de entrada do formulário
     GtkEntry *titulo_entry = GTK_ENTRY(gtk_builder_get_object(builder, "titulo_entry"));
     GtkEntry *autor_entry = GTK_ENTRY(gtk_builder_get_object(builder, "autor_entry"));
     GtkEntry *ano_entry = GTK_ENTRY(gtk_builder_get_object(builder, "ano_entry"));
@@ -128,19 +127,19 @@ static void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    // Obtém valores digitados
+    // Lê os valores digitados pelo usuário
     const char *titulo = gtk_editable_get_text(GTK_EDITABLE(titulo_entry));
     const char *autor = gtk_editable_get_text(GTK_EDITABLE(autor_entry));
     const char *ano = gtk_editable_get_text(GTK_EDITABLE(ano_entry));
     const char *disp_text = gtk_editable_get_text(GTK_EDITABLE(disponibilidade_entry));
 
-    // Verifica se os campos não estão vazios
+    // Verifica se todos os campos estão preenchidos
     if (!titulo || !autor || !ano || !disp_text) {
         g_warning("Todos os campos devem ser preenchidos");
         return;
     }
 
-    // Conecta ao banco
+    // Conecta ao banco de dados
     Database db = conectaDB("database/BOOKSTACK.db");
     if (db.status != 1) {
         g_warning("Falha ao conectar ao banco de dados");
@@ -150,14 +149,14 @@ static void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
     // Converte disponibilidade para inteiro
     int disp_int = atoi(disp_text);
 
-    // Insere novo livro
+    // Insere o novo livro no banco
     char *idLivro = addLivro(db.db, titulo, autor, ano, disp_int);
 
     if (idLivro) {
         g_print("Livro cadastrado com ID: %s\n", idLivro);
         free(idLivro);
 
-        // Limpa campos
+        // Limpa os campos após o cadastro
         gtk_editable_set_text(GTK_EDITABLE(titulo_entry), "");
         gtk_editable_set_text(GTK_EDITABLE(autor_entry), "");
         gtk_editable_set_text(GTK_EDITABLE(ano_entry), "");
@@ -166,6 +165,7 @@ static void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
         g_warning("Falha ao cadastrar livro");
     }
 
+    // Fecha a conexão com o banco
     discDB(&db);
 }
 
@@ -173,8 +173,8 @@ static void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
 static void on_livros_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
-    
-    // Carrega interface de livros
+
+    // Carrega a interface de livros do arquivo .ui
     if (!gtk_builder_add_from_file(builder, "src/book_window.ui", &error)) {
         g_warning("Erro ao carregar book_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
@@ -182,17 +182,18 @@ static void on_livros_clicked(GtkButton *button, gpointer user_data) {
         return;
     }
 
+    // Obtém a janela de livros
     GtkWindow *book_window = GTK_WINDOW(gtk_builder_get_object(builder, "book_window"));
     if (!book_window) {
         g_warning("Falha ao obter a janela de livros do builder");
         g_object_unref(builder);
         return;
     }
-    
-    // Mantém builder vivo enquanto a janela existir
+
+    // Mantém o builder vivo enquanto a janela existir
     g_object_set_data_full(G_OBJECT(book_window), "builder", builder, (GDestroyNotify)g_object_unref);
 
-    // Conecta botão de cadastro de livros
+    // Conecta o botão de cadastro de livro
     GtkButton *cad_btn = GTK_BUTTON(gtk_builder_get_object(builder, "cadastrar_livro_btn"));
     if (cad_btn) {
         g_signal_connect(cad_btn, "clicked", G_CALLBACK(on_cadastrar_livros), builder);
@@ -201,57 +202,57 @@ static void on_livros_clicked(GtkButton *button, gpointer user_data) {
     gtk_window_set_application(book_window, GTK_APPLICATION(user_data));
     gtk_window_present(book_window);
 
-    // Conecta o botão de voltar a janela
+    // Conecta o botão de voltar
     GtkButton *back_btn = GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));
     if (back_btn) {
         g_signal_connect(back_btn, "clicked", G_CALLBACK(on_back_to_main), user_data);
     }
 }
 
-// --------- Funções Empréstimo para conexão do GTK com DB ---------
+// Funções relacionadas ao cadastro de empréstimos
 
-// Callback para cadastrar empréstimo
+// Callback chamado ao clicar no botão de cadastrar empréstimo
 static void on_cadastrar_emprestimo(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = GTK_BUILDER(user_data);
 
-    // Obtém campos de entrada
+    // Busca os campos de entrada do formulário
     GtkEntry *dtEmp_entry = GTK_ENTRY(gtk_builder_get_object(builder, "dtEmp_entry"));
     GtkEntry *dtDevPre_entry = GTK_ENTRY(gtk_builder_get_object(builder, "dtDevPre_entry"));
     GtkEntry *idlivro_entry = GTK_ENTRY(gtk_builder_get_object(builder, "idlivro_entry"));
     GtkEntry *iduser_entry = GTK_ENTRY(gtk_builder_get_object(builder, "iduser_entry"));
 
-    // Verifica se todos foram encontrados
+    // Verifica se todos os campos foram encontrados
     if (!dtEmp_entry || !dtDevPre_entry || !idlivro_entry || !iduser_entry) {
         g_warning("Não foi possível obter todos os campos de entrada");
         return;
     }
 
-    // Obtém valores
+    // Lê os valores digitados pelo usuário
     const char *dtEmp = gtk_editable_get_text(GTK_EDITABLE(dtEmp_entry));
     const char *dtDevPre = gtk_editable_get_text(GTK_EDITABLE(dtDevPre_entry));
     const char *idlivro = gtk_editable_get_text(GTK_EDITABLE(idlivro_entry));
     const char *iduser = gtk_editable_get_text(GTK_EDITABLE(iduser_entry));
 
-    // Verifica se estão preenchidos
+    // Verifica se todos os campos estão preenchidos
     if (!dtEmp || !dtDevPre || !idlivro || !iduser) {
         g_warning("Todos os campos devem ser preenchidos");
         return;
     }
 
-    // Conecta ao banco
+    // Conecta ao banco de dados
     Database db = conectaDB("database/BOOKSTACK.db");
     if (db.status != 1) {
         g_warning("Falha ao conectar ao banco de dados");
         return;
     }
 
-    // Registra empréstimo
+    // Registra o empréstimo no banco
     char *idEmp = regEmpLivro(db.db, dtEmp, dtDevPre, idlivro, iduser);
     if (idEmp) {
         g_print("Empréstimo cadastrado com ID: %s\n", idEmp);
         free(idEmp);
-        
-        // Limpa campos
+
+        // Limpa os campos após o cadastro
         gtk_editable_set_text(GTK_EDITABLE(dtEmp_entry), "");
         gtk_editable_set_text(GTK_EDITABLE(dtDevPre_entry), "");
         gtk_editable_set_text(GTK_EDITABLE(idlivro_entry), "");
@@ -260,6 +261,7 @@ static void on_cadastrar_emprestimo(GtkButton *button, gpointer user_data) {
         g_warning("Falha ao cadastrar usuário");
     }
 
+    // Fecha a conexão com o banco
     discDB(&db);
 }
 
@@ -267,8 +269,8 @@ static void on_cadastrar_emprestimo(GtkButton *button, gpointer user_data) {
 static void on_emp_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
-    
-    // Carrega interface de empréstimos
+
+    // Carrega a interface de empréstimos do arquivo .ui
     if (!gtk_builder_add_from_file(builder, "src/emp_window.ui", &error)) {
         g_warning("Erro ao carregar emp_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
@@ -276,17 +278,18 @@ static void on_emp_clicked(GtkButton *button, gpointer user_data) {
         return;
     }
 
+    // Obtém a janela de empréstimos
     GtkWindow *emp_window = GTK_WINDOW(gtk_builder_get_object(builder, "emp_window"));
     if (!emp_window) {
         g_warning("Falha ao obter a janela de empréstimo do builder");
         g_object_unref(builder);
         return;
     }
-    
-    // Mantém builder vivo enquanto a janela existir
+
+    // Mantém o builder vivo enquanto a janela existir
     g_object_set_data_full(G_OBJECT(emp_window), "builder", builder, (GDestroyNotify)g_object_unref);
 
-    // Conecta botão de cadastro de empréstimo
+    // Conecta o botão de cadastro de empréstimo
     GtkButton *cad_btn = GTK_BUTTON(gtk_builder_get_object(builder, "cadastrar_emprestimo_btn"));
     if (cad_btn) {
         g_signal_connect(cad_btn, "clicked", G_CALLBACK(on_cadastrar_emprestimo), builder);
@@ -295,7 +298,7 @@ static void on_emp_clicked(GtkButton *button, gpointer user_data) {
     gtk_window_set_application(emp_window, GTK_APPLICATION(user_data));
     gtk_window_present(emp_window);
 
-    // Conecta o botão de voltar a janela
+    // Conecta o botão de voltar
     GtkButton *back_btn = GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));
     if (back_btn) {
         g_signal_connect(back_btn, "clicked", G_CALLBACK(on_back_to_main), user_data);
@@ -307,7 +310,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
-    // Carrega interface principal
+    // Carrega a interface principal do arquivo .ui
     if (!gtk_builder_add_from_file(builder, "src/main_window.ui", &error)) {
         g_error("Erro ao carregar main_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
@@ -315,7 +318,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
         return;
     }
 
-    // Obtém janela principal
+    // Obtém a janela principal
     GtkWindow *window = GTK_WINDOW(gtk_builder_get_object(builder, "main_window"));
     if (!window) {
         g_error("Falha ao carregar a janela principal.");
@@ -323,7 +326,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
         return;
     }
 
-    // Carrega CSS
+    // Carrega o CSS da aplicação
     GtkCssProvider *css = gtk_css_provider_new();
     gtk_style_context_add_provider_for_display(
         gdk_display_get_default(),
@@ -332,10 +335,10 @@ static void activate(GtkApplication *app, gpointer user_data) {
     );
     gtk_css_provider_load_from_path(css, "assets/style.css");
 
-    // Associa janela à aplicação
+    // Associa a janela à aplicação
     gtk_window_set_application(window, app);
 
-    // Obtém e conecta botões principais
+    // Obtém e conecta os botões principais
     GtkButton *livros_btn = GTK_BUTTON(gtk_builder_get_object(builder, "livros"));
     if (livros_btn) {
         g_signal_connect(livros_btn, "clicked", G_CALLBACK(on_livros_clicked), app);
@@ -357,30 +360,30 @@ static void activate(GtkApplication *app, gpointer user_data) {
         g_warning("Botão 'emprestimo' não encontrado na interface");
     }
 
-    // Exibe janela principal
+    // Exibe a janela principal
     gtk_widget_set_visible(GTK_WIDGET(window), TRUE);
     g_object_unref(builder);
-}   
+}
 
-// Função main
+// Função principal do programa
 int main(int argc, char **argv) {
     #ifdef GTK_SRCDIR
-        g_chdir(GTK_SRCDIR); // Ajusta diretório de trabalho se compilado com GTK_SRCDIR
+        g_chdir(GTK_SRCDIR); // Ajusta o diretório de trabalho se compilado com GTK_SRCDIR
     #endif
 
-    // Inicializa GTK
+    // Inicializa o GTK
     if (!gtk_init_check()) {
         g_printerr("Falha ao inicializar GTK\n");
         return 1;
     }
 
-    // Cria aplicação GTK
+    // Cria a aplicação GTK
     GtkApplication *app = gtk_application_new("org.gtk.bookstack", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 
-    // Executa aplicação
+    // Executa a aplicação
     int status = g_application_run(G_APPLICATION(app), argc, argv);
-    
+
     g_object_unref(app);
     return status;
 }
