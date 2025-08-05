@@ -91,4 +91,4 @@ Projeto acadêmico, livre para uso educacional.
 
 ---
 
-Desenvolvido por
+Desenvolvido por Murilo Chagas
