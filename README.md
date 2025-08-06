@@ -54,19 +54,15 @@ Certifique-se de ter o [GTK4](https://www.gtk.org/) e o [SQLite3](https://www.sq
 No terminal, execute:
 
 ```sh
-make build
+minGW32-make
 ```
 
 O executável será gerado em `build/BookStack.exe`.
 
 ## Como Executar
 
-Após compilar, execute:
+Após compilar, execute ou diretamente:
 
-```sh
-make run
-```
-ou diretamente:
 ```sh
 ./build/BookStack.exe
 ```
