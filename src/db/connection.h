@@ -13,3 +13,5 @@ typedef struct {
 
 Database conectaDB(const char *caminho_db);
 void discDB(Database *db);
+
+#endif

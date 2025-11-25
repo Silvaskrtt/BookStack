@@ -6,3 +6,5 @@
 // Função para gerar ID's personalizados
 
 char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char *colunaID, int totalDigitos);
+
+#endif
