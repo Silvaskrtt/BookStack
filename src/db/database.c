@@ -4,32 +4,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-// Função para conectar ao banco de dados SQLite
-Database conectaDB(const char *caminho_db) {
-    SetConsoleOutputCP(CP_UTF8); // Configura saída do console para UTF-8 no Windows
-
-    Database db = {NULL, 0}; // Estrutura inicializada
-
-    // Abre conexão com o banco
-    if (sqlite3_open(caminho_db, &db.db) != SQLITE_OK) {
-        fprintf(stderr, "Erro ao abrir o banco: %s\n", sqlite3_errmsg(db.db));
-        db.status = -1; // Falha
-    } else {
-        db.status = 1; // Sucesso
-    }
-
-    return db;
-}
-
-// Função para desconectar do banco
-void discDB(Database *db) {
-    if (db->db) {
-        sqlite3_close(db->db); // Fecha conexão
-        db->db = NULL;
-    }
-    db->status = 0;
-}
-
 // Gera IDs personalizados com prefixo (ex: USR001)
 char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char *colunaID, int totalDigitos) {
     if (!db || !prefixo || !tabela || !colunaID || totalDigitos <= 0) return NULL;
