@@ -1,4 +1,4 @@
-#include "database.h"
+#include "db/connection.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
