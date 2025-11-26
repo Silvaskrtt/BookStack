@@ -1,4 +1,5 @@
 #include "livros.h"
+#include "../id_generator.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -48,4 +49,27 @@ char* addLivro(sqlite3 *db, const char *titulo, const char *autor, const char *a
 
     printf("Livro cadastrado com ID: %s\n", novoID);
     return novoID;
+}
+
+// Lista todos os livros
+void listLivro(sqlite3 *db) {
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT ID_Livro_PK, Titulo, Autor, Ano, Disponibilidade FROM tbl_Livros;";
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    printf("\n=== Lista de Livros ===\n");
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const char *id = (const char *)sqlite3_column_text(stmt, 0);
+        const char *titulo = (const char *)sqlite3_column_text(stmt, 1);
+        const char *autor = (const char *)sqlite3_column_text(stmt, 2);
+        const char *ano = (const char *)sqlite3_column_text(stmt, 3);
+        int disponibilidade = sqlite3_column_int(stmt, 4);
+        printf("ID: %s | Título: %s | Autor: %s | Ano: %s | Disponível: %d\n", id, titulo, autor, ano, disponibilidade);
+    }
+
+    sqlite3_finalize(stmt);
 }

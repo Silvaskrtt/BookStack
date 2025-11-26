@@ -30,8 +30,9 @@ $(OBJ_DIR)/src/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-run:
-	$(EXEC)
+run: build
+	@echo "Executando $(EXEC)..."
+	@$(EXEC)
 
 clean:
 	rm -rf $(BUILD_DIR)

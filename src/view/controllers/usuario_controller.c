@@ -1,6 +1,7 @@
 #include "usuario_controller.h"
 #include <gtk/gtk.h>
-#include "../../include/database.h"
+#include <stdlib.h>
+#include "../../db/db_manager.h"
 
 // Callback chamado ao clicar no botão de cadastrar usuário
 void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
@@ -26,13 +27,13 @@ void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    Database db = conectaDB("database/BOOKSTACK.db");
+    Database db = db_init("database/BOOKSTACK.db");
     if (db.status != 1) {
         g_warning("Falha ao conectar ao banco de dados");
         return;
     }
 
-    char *idUsuario = cadUser(db.db, nome, sobrenome, cpf, numtelefone);
+    char *idUsuario = db_user_create(db, nome, sobrenome, cpf, numtelefone);
     if (idUsuario) {
         g_print("Usuário cadastrado com ID: %s\n", idUsuario);
         free(idUsuario);
@@ -45,7 +46,7 @@ void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         g_warning("Falha ao cadastrar usuário");
     }
 
-    discDB(&db);
+    db_close(&db);
 }
 
 // Abre a janela de gerenciamento de usuários
@@ -53,7 +54,7 @@ void on_users_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
-    if (!gtk_builder_add_from_file(builder, "src/users_window.ui", &error)) {
+    if (!gtk_builder_add_from_file(builder, "src/forms/users_window.ui", &error)) {
         g_warning("Erro ao carregar users_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
         g_object_unref(builder);
@@ -77,7 +78,7 @@ void on_users_clicked(GtkButton *button, gpointer user_data) {
     // Conecta botão de voltar
     GtkButton *back_btn = GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));
     if (back_btn) {
-        g_signal_connect(back_btn, "clicked", G_CALLBACK(gtk_widget_destroy), users_window);
+        g_signal_connect(back_btn, "clicked", G_CALLBACK(gtk_window_destroy), users_window);
     }
 
     gtk_window_set_application(users_window, GTK_APPLICATION(user_data));

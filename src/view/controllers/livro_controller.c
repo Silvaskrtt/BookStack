@@ -1,7 +1,7 @@
 #include "livro_controller.h"
 #include <gtk/gtk.h>
-#include "../../include/database.h"
 #include <stdlib.h>
+#include "../../db/db_manager.h"
 
 void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = GTK_BUILDER(user_data);
@@ -26,7 +26,7 @@ void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    Database db = conectaDB("database/BOOKSTACK.db");
+    Database db = db_init("database/BOOKSTACK.db");
     if (db.status != 1) {
         g_warning("Falha ao conectar ao banco de dados");
         return;
@@ -34,7 +34,7 @@ void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
 
     int disp_int = atoi(disp_text);
 
-    char *idLivro = addLivro(db.db, titulo, autor, ano, disp_int);
+    char *idLivro = db_book_create(db, titulo, autor, ano, disp_int);
 
     if (idLivro) {
         g_print("Livro cadastrado com ID: %s\n", idLivro);
@@ -48,14 +48,14 @@ void on_cadastrar_livros(GtkButton *button, gpointer user_data) {
         g_warning("Falha ao cadastrar livro");
     }
 
-    discDB(&db);
+    db_close(&db);
 }
 
 void on_livros_clicked(GtkButton *button, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
-    if (!gtk_builder_add_from_file(builder, "src/book_window.ui", &error)) {
+    if (!gtk_builder_add_from_file(builder, "src/forms/book_window.ui", &error)) {
         g_warning("Erro ao carregar book_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
         g_object_unref(builder);
@@ -78,7 +78,7 @@ void on_livros_clicked(GtkButton *button, gpointer user_data) {
 
     GtkButton *back_btn = GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));
     if (back_btn) {
-        g_signal_connect(back_btn, "clicked", G_CALLBACK(gtk_widget_destroy), book_window);
+        g_signal_connect(back_btn, "clicked", G_CALLBACK(gtk_window_destroy), book_window);
     }
 
     gtk_window_set_application(book_window, GTK_APPLICATION(user_data));

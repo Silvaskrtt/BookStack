@@ -9,15 +9,24 @@ char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char
     if (!db || !prefixo || !tabela || !colunaID || totalDigitos <= 0) return NULL;
 
     // Consulta SQL para pegar o maior número já usado no ID
-    char sql[256];
-    snprintf(sql, sizeof(sql),
-        "SELECT MAX(CAST(SUBSTR(%s, %d) AS INTEGER)) FROM %s WHERE %s LIKE '%s%%';",
-        colunaID,
-        (int)(strlen(prefixo) + 1),
+    char sql[300];
+    int r = snprintf(sql, sizeof(sql),
+        "SELECT MAX(CAST(SUBSTR(%s, %zu) AS INTEGER)) " 
+        "FROM %s"
+        "WHERE %s LIKE '%s%%';",
+        colunaID, 
+        strlen(prefixo) + 1,
         tabela,
         colunaID,
-        prefixo);
+        prefixo
+    );
 
+    if (r < 0 || r >= sizeof(sql)) {
+        fprintf(stderr, "Erro ao formatar a consulta SQL para geração de ID\n");
+        return NULL;
+    }
+
+    // Prepara statement
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
@@ -26,14 +35,15 @@ char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char
     }
 
     int proximoNumero = 1; // Valor padrão se não houver registros
-    if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_NULL) {
+    if (rc == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_INTEGER) {
         proximoNumero = sqlite3_column_int(stmt, 0) + 1; // Incrementa último número encontrado
     }
+
     sqlite3_finalize(stmt);
 
     // Aloca memória para o novo ID
-    int tamanhoTotal = strlen(prefixo) + totalDigitos + 1;
-    char *novoID = malloc(tamanhoTotal * sizeof(char));
+    size_t tamanhoTotal = strlen(prefixo) + totalDigitos + 1;
+    char *novoID = malloc(tamanhoTotal);
     if (!novoID) return NULL;
 
     // Formata ID (ex: USR001)

@@ -1,4 +1,5 @@
 #include "usuarios.h"
+#include "../id_generator.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

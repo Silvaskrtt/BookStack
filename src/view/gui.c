@@ -4,13 +4,13 @@
 #include "controllers/livro_controller.h"
 #include "controllers/emprestimo_controller.h"
 
-// Função principal de inicialização da aplicação
-static void activate(GtkApplication *app, gpointer user_data) {
+// Função de inicialização da aplicação (chamada por main.c)
+void activate(GtkApplication *app, gpointer user_data) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
     // Carrega a interface principal do arquivo .ui
-    if (!gtk_builder_add_from_file(builder, "src/main_window.ui", &error)) {
+    if (!gtk_builder_add_from_file(builder, "src/forms/main_window.ui", &error)) {
         g_error("Erro ao carregar main_window.ui: %s", error ? error->message : "Erro desconhecido");
         if (error) g_clear_error(&error);
         g_object_unref(builder);
@@ -65,27 +65,4 @@ static void activate(GtkApplication *app, gpointer user_data) {
     // Exibe a janela principal
     gtk_widget_set_visible(GTK_WIDGET(window), TRUE);
     g_object_unref(builder);
-}
-
-// Função principal do programa
-int main(int argc, char **argv) {
-    #ifdef GTK_SRCDIR
-        g_chdir(GTK_SRCDIR); // Ajusta o diretório de trabalho se compilado com GTK_SRCDIR
-    #endif
-
-    // Inicializa o GTK
-    if (!gtk_init_check()) {
-        g_printerr("Falha ao inicializar GTK\n");
-        return 1;
-    }
-
-    // Cria a aplicação GTK
-    GtkApplication *app = gtk_application_new("org.gtk.bookstack", G_APPLICATION_DEFAULT_FLAGS);
-    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-
-    // Executa a aplicação
-    int status = g_application_run(G_APPLICATION(app), argc, argv);
-
-    g_object_unref(app);
-    return status;
 }

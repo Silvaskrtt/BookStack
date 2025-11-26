@@ -1,4 +1,5 @@
 #include "emprestimos.h"
+#include "../id_generator.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@ char* regEmpLivro(sqlite3 *db, const char *data_emprestimo, const char *data_dev
     }
 
     // Gera ID do empréstimo
-    char *novoID = genIdPers(db, "EMP", "tbl_Emprestimos", "ID_Emprestimo_PK", 3);
+    char *novoID = genIdPers(db, "EMP", "tbl_Emprestimos","ID_Emprestimo_PK", 3);
     if (!novoID) {
         fprintf(stderr, "Erro ao gerar novo ID para o empréstimo\n");
         return NULL;
@@ -75,12 +76,6 @@ void consultEmp(sqlite3 *db) {
         return;
     }
 
-    // Cabeçalho formatado
-    printf("---------------------------------------------------------------------------------------------\n");
-    printf("| %-12s | %-8s | %-10s | %-30s | %-12s | %-12s |\n",
-           "ID Emprestimo", "ID Livro", "ID Usuário", "Título", "Nome", "Sobrenome");
-    printf("---------------------------------------------------------------------------------------------\n");
-
     // Percorre resultados
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         const unsigned char *id_emprestimo_pk = sqlite3_column_text(stmt, 0);
@@ -98,8 +93,6 @@ void consultEmp(sqlite3 *db) {
                nome ? (const char*)nome : "",
                sobrenome ? (const char*)sobrenome : "");
     }
-
-    printf("---------------------------------------------------------------------------------------------\n");
 
     if (rc != SQLITE_DONE) {
         fprintf(stderr, "Erro ao percorrer resultados: %s\n", sqlite3_errmsg(db));
