@@ -1,4 +1,3 @@
-# Compilador
 CC = gcc
 
 # Diretórios
@@ -10,9 +9,11 @@ EXEC = $(BUILD_DIR)/BookStack.exe
 CFLAGS = -Iinclude -Wall -std=c11 $(shell pkg-config --cflags gtk4)
 LDFLAGS = -lsqlite3 $(shell pkg-config --libs gtk4) -mwindows
 
-# Fontes
-SRC = src/gui.c src/database.c
-OBJ = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRC))
+# Fontes (automatizado para incluir novos arquivos em subpastas)
+SRC = $(wildcard src/*.c) $(wildcard src/db/*.c) $(wildcard src/db/models/*.c) $(wildcard src/view/*.c) $(wildcard src/view/controllers/*.c)
+
+# Objetos correspondentes (espelha subdiretório dentro de $(OBJ_DIR))
+OBJ = $(patsubst src/%.c,$(OBJ_DIR)/src/%.o,$(SRC))
 
 # Alvo padrão
 all: build
@@ -24,9 +25,9 @@ $(EXEC): $(OBJ)
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-# Compilação .c → .o
-$(OBJ_DIR)/%.o: src/%.c
-	@mkdir -p $(OBJ_DIR)
+# Compilação .c → .o (cria diretório de destino se necessário)
+$(OBJ_DIR)/src/%.o: src/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run:

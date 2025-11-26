@@ -1,13 +1,8 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
-#include "database.h"
 #include "controllers/usuario_controller.h"
 #include "controllers/livro_controller.h"
 #include "controllers/emprestimo_controller.h"
-
-    gtk_window_set_application(book_window, GTK_APPLICATION(user_data));
-    gtk_window_present(book_window);
-}
 
 // Função principal de inicialização da aplicação
 static void activate(GtkApplication *app, gpointer user_data) {
