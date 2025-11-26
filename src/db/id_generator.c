@@ -12,7 +12,7 @@ char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char
     char sql[300];
     int r = snprintf(sql, sizeof(sql),
         "SELECT MAX(CAST(SUBSTR(%s, %zu) AS INTEGER)) " 
-        "FROM %s"
+        "FROM %s "
         "WHERE %s LIKE '%s%%';",
         colunaID, 
         strlen(prefixo) + 1,
@@ -35,7 +35,7 @@ char* genIdPers(sqlite3 *db, const char *prefixo, const char *tabela, const char
     }
 
     int proximoNumero = 1; // Valor padrão se não houver registros
-    if (rc == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_INTEGER) {
+    if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_NULL) {
         proximoNumero = sqlite3_column_int(stmt, 0) + 1; // Incrementa último número encontrado
     }
 

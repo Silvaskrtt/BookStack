@@ -32,7 +32,7 @@ $(OBJ_DIR)/src/%.o: src/%.c
 
 run: build
 	@echo "Executando $(EXEC)..."
-	@$(EXEC)
+	@cd $(CURDIR) && ./$(EXEC)
 
 clean:
 	rm -rf $(BUILD_DIR)

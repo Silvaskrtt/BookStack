@@ -16,6 +16,8 @@ Database conectaDB(const char *caminho_db) {
     } else {
         db.status = 1; // Sucesso
     }
+
+    return db;
 }
 
 // Função para desconectar do banco

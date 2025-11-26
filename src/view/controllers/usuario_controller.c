@@ -27,7 +27,7 @@ void on_cadastrar_usuario(GtkButton *button, gpointer user_data) {
         return;
     }
 
-    Database db = db_init("database/BOOKSTACK.db");
+    Database db = db_init(get_db_path());
     if (db.status != 1) {
         g_warning("Falha ao conectar ao banco de dados");
         return;

@@ -3,6 +3,7 @@
 #include "models/livros.h"
 #include "models/emprestimos.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
  * DB Manager - Implementação
@@ -10,6 +11,34 @@
  */
 
 // ========== GERENCIAMENTO DE CONEXÃO ==========
+
+// Retorna o caminho do banco de dados
+const char* get_db_path(void) {
+    static char db_path[512] = {0};
+    
+    // Se a variável de ambiente estiver definida, usa ela
+    const char *env_path = getenv("BOOKSTACK_DB_PATH");
+    if (env_path) {
+        return env_path;
+    }
+    
+    // Se o caminho relativo existe, usa ele
+    FILE *test = fopen("database/BOOKSTACK.db", "r");
+    if (test) {
+        fclose(test);
+        return "database/BOOKSTACK.db";
+    }
+    
+    // Tenta caminho relativo a partir do diretório build (quando executado como make run)
+    test = fopen("../database/BOOKSTACK.db", "r");
+    if (test) {
+        fclose(test);
+        return "../database/BOOKSTACK.db";
+    }
+    
+    // Fallback: retorna o caminho padrão e deixa SQLite reportar o erro
+    return "database/BOOKSTACK.db";
+}
 
 Database db_init(const char *db_path) {
     if (!db_path) {

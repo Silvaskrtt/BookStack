@@ -14,6 +14,12 @@
 // ========== GERENCIAMENTO DE CONEXÃO ==========
 
 /**
+ * Retorna o caminho do banco de dados (corrigido para execução)
+ * @return String com o caminho do banco de dados
+ */
+const char* get_db_path(void);
+
+/**
  * Inicializa conexão com o banco de dados
  * @param db_path Caminho do arquivo de banco de dados
  * @return Estrutura Database com status de conexão
